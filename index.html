@@ -1,9 +1,13 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0f172a" />
   <title>Traductor en Tiempo Real: Español ⇄ Inglés / Griego</title>
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+  <link rel="apple-touch-icon" href="./icon.svg" />
   <style>
     :root {
       --bg: #0f172a;
@@ -16,9 +20,7 @@
       --target: #10b981;
       --target-glow: rgba(16, 185, 129, 0.35);
       --danger: #ef4444;
-      --warn: #f59e0b;
     }
-
 
     * {
       box-sizing: border-box;
@@ -26,7 +28,6 @@
       padding: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
-
 
     body {
       background: var(--bg);
@@ -37,7 +38,6 @@
       padding: 16px;
       gap: 16px;
     }
-
 
     header {
       display: flex;
@@ -51,7 +51,6 @@
       padding: 14px 18px;
     }
 
-
     .title-group h1 {
       font-size: 1.15rem;
       font-weight: 700;
@@ -60,13 +59,11 @@
       gap: 8px;
     }
 
-
     .title-group p {
       font-size: 0.85rem;
       color: var(--muted);
       margin-top: 2px;
     }
-
 
     .controls-bar {
       display: flex;
@@ -74,7 +71,6 @@
       align-items: center;
       gap: 10px;
     }
-
 
     .btn {
       border: 1px solid var(--card-border);
@@ -91,19 +87,16 @@
       transition: all 0.15s ease;
     }
 
-
     .btn:hover {
       border-color: #64748b;
       background: #1e293b;
     }
-
 
     .btn.active-toggle {
       background: rgba(16, 185, 129, 0.18);
       border-color: var(--target);
       color: #6ee7b7;
     }
-
 
     .speaking-banner {
       display: none;
@@ -118,11 +111,9 @@
       font-size: 0.95rem;
     }
 
-
     .speaking-banner.visible {
       display: flex;
     }
-
 
     .alert-banner {
       display: none;
@@ -137,11 +128,9 @@
       font-size: 0.9rem;
     }
 
-
     .alert-banner.visible {
       display: flex;
     }
-
 
     .grid {
       display: grid;
@@ -150,13 +139,11 @@
       flex: 1;
     }
 
-
     @media (max-width: 820px) {
       .grid {
         grid-template-columns: 1fr;
       }
     }
-
 
     .panel {
       background: var(--card);
@@ -169,18 +156,15 @@
       transition: border-color 0.2s, box-shadow 0.2s;
     }
 
-
     .panel.listening-es {
       border-color: var(--es);
       box-shadow: 0 0 24px var(--es-glow);
     }
 
-
     .panel.listening-target {
       border-color: var(--target);
       box-shadow: 0 0 24px var(--target-glow);
     }
-
 
     .panel-header {
       display: flex;
@@ -190,7 +174,6 @@
       flex-wrap: wrap;
     }
 
-
     .lang-badge {
       font-size: 1.05rem;
       font-weight: 700;
@@ -198,7 +181,6 @@
       align-items: center;
       gap: 8px;
     }
-
 
     .lang-switcher {
       display: inline-flex;
@@ -208,7 +190,6 @@
       padding: 3px;
       gap: 4px;
     }
-
 
     .lang-opt {
       border: none;
@@ -222,12 +203,10 @@
       transition: all 0.15s;
     }
 
-
     .lang-opt.active {
       background: var(--target);
       color: #052e16;
     }
-
 
     .status-pill {
       font-size: 0.78rem;
@@ -238,14 +217,12 @@
       border: 1px solid var(--card-border);
     }
 
-
     .status-pill.live {
       background: rgba(239, 68, 68, 0.2);
       border-color: var(--danger);
       color: #fca5a5;
       font-weight: 700;
     }
-
 
     .mic-area {
       display: flex;
@@ -258,7 +235,6 @@
       border-radius: 14px;
       border: 1px dashed var(--card-border);
     }
-
 
     .mic-btn {
       width: 68px;
@@ -274,29 +250,24 @@
       color: white;
     }
 
-
     .mic-btn.es-btn {
       background: var(--es);
     }
 
-
     .mic-btn.target-btn {
       background: var(--target);
     }
-
 
     .mic-btn.recording {
       background: var(--danger);
       animation: pulse 1.2s infinite;
     }
 
-
     @keyframes pulse {
       0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); }
       70% { transform: scale(1.06); box-shadow: 0 0 0 14px rgba(239, 68, 68, 0); }
       100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
     }
-
 
     .live-box {
       min-height: 76px;
@@ -309,12 +280,10 @@
       color: var(--text);
     }
 
-
     .live-box .interim {
       color: var(--muted);
       font-style: italic;
     }
-
 
     .translation-box {
       min-height: 76px;
@@ -327,7 +296,6 @@
       gap: 6px;
     }
 
-
     .translation-label {
       font-size: 0.75rem;
       text-transform: uppercase;
@@ -338,19 +306,16 @@
       align-items: center;
     }
 
-
     .translation-text {
       font-size: 1.08rem;
       font-weight: 600;
       color: #e2e8f0;
     }
 
-
     .manual-row {
       display: flex;
       gap: 8px;
     }
-
 
     .manual-row input {
       flex: 1;
@@ -362,19 +327,16 @@
       font-size: 0.92rem;
     }
 
-
     .manual-row input:focus {
       outline: none;
       border-color: #64748b;
     }
-
 
     .quick-chips {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
     }
-
 
     .chip {
       background: #0f172a;
@@ -385,7 +347,6 @@
       font-size: 0.78rem;
       cursor: pointer;
     }
-
 
     .chip:hover {
       color: var(--text);
@@ -405,18 +366,15 @@
     </div>
   </header>
 
-
   <div id="speakingBanner" class="speaking-banner">
     <span id="speakingText">🔊 Reproduciendo traducción...</span>
     <button id="btnStopAudio" class="btn" type="button">⏹ Detener voz</button>
   </div>
 
-
   <div id="alertBanner" class="alert-banner">
     <span id="alertText">Aviso de micrófono</span>
     <button id="btnDismissAlert" class="btn" type="button">Cerrar</button>
   </div>
-
 
   <main class="grid">
     <!-- PANEL IZQUIERDO: ESPAÑOL FIJO -->
@@ -426,12 +384,10 @@
         <span id="statusEs" class="status-pill">Inactivo</span>
       </div>
 
-
       <div class="mic-area">
         <button id="micEs" class="mic-btn es-btn" type="button" title="Activar micrófono en Español">🎤</button>
         <span id="hintEs" style="font-size: 0.85rem; color: var(--muted);">Toca para hablar en Español y di "Ok" al terminar</span>
       </div>
-
 
       <div>
         <div class="translation-label" style="margin-bottom: 4px;">
@@ -439,7 +395,6 @@
         </div>
         <div id="liveEs" class="live-box"><span class="interim">Esperando voz...</span></div>
       </div>
-
 
       <div class="translation-box">
         <div class="translation-label">
@@ -449,12 +404,10 @@
         <div id="transFromEs" class="translation-text">—</div>
       </div>
 
-
       <div class="manual-row">
         <input id="inputEs" type="text" placeholder='Escribe en español y termina con "ok"...' />
         <button id="sendEs" class="btn" type="button">Traducir</button>
       </div>
-
 
       <div class="quick-chips">
         <button class="chip" type="button" data-side="es" data-text="Hola, ¿cómo estás hoy? Ok">Ejemplo 1</button>
@@ -462,7 +415,6 @@
         <button class="chip" type="button" data-side="es" data-text="Muchas gracias por tu ayuda. Ok">Ejemplo 3</button>
       </div>
     </section>
-
 
     <!-- PANEL DERECHO: INGLÉS O GRIEGO -->
     <section id="panelTarget" class="panel">
@@ -474,12 +426,10 @@
         <span id="statusTarget" class="status-pill">Inactivo</span>
       </div>
 
-
       <div class="mic-area">
         <button id="micTarget" class="mic-btn target-btn" type="button" title="Activar micrófono">🎤</button>
         <span id="hintTarget" style="font-size: 0.85rem; color: var(--muted);">Tap to speak in English and say "Ok" at the end</span>
       </div>
-
 
       <div>
         <div class="translation-label" style="margin-bottom: 4px;">
@@ -487,7 +437,6 @@
         </div>
         <div id="liveTarget" class="live-box"><span class="interim">Waiting for voice...</span></div>
       </div>
-
 
       <div class="translation-box">
         <div class="translation-label">
@@ -497,17 +446,14 @@
         <div id="transFromTarget" class="translation-text">—</div>
       </div>
 
-
       <div class="manual-row">
         <input id="inputTarget" type="text" placeholder='Type in English ending with "ok"...' />
         <button id="sendTarget" class="btn" type="button">Traducir</button>
       </div>
 
-
       <div id="chipsTarget" class="quick-chips"></div>
     </section>
   </main>
-
 
   <script>
     (function () {
@@ -544,17 +490,14 @@
         }
       };
 
-
       let targetLang = "en";
       let autoTurn = true;
-      let activeSide = null; // 'es' | 'target' | null
+      let activeSide = null;
       let recognition = null;
       let isProcessing = false;
       let lastSpokenEsToTarget = "";
       let lastSpokenTargetToEs = "";
 
-
-      // DOM refs
       const btnTestAudio = document.getElementById("btnTestAudio");
       const btnAutoTurn = document.getElementById("btnAutoTurn");
       const speakingBanner = document.getElementById("speakingBanner");
@@ -563,7 +506,6 @@
       const alertBanner = document.getElementById("alertBanner");
       const alertText = document.getElementById("alertText");
       const btnDismissAlert = document.getElementById("btnDismissAlert");
-
 
       const panelEs = document.getElementById("panelEs");
       const panelTarget = document.getElementById("panelTarget");
@@ -588,17 +530,14 @@
       const optEl = document.getElementById("optEl");
       const chipsTarget = document.getElementById("chipsTarget");
 
-
       function showAlert(msg) {
         alertText.textContent = msg;
         alertBanner.classList.add("visible");
       }
 
-
       function hideAlert() {
         alertBanner.classList.remove("visible");
       }
-
 
       function unlockAudio() {
         try {
@@ -613,16 +552,13 @@
         } catch (e) {}
       }
 
-
       function setTargetLanguage(lang) {
         if (activeSide) stopListening();
         targetLang = lang;
         const cfg = LANG_CONFIG[lang];
 
-
         optEn.classList.toggle("active", lang === "en");
         optEl.classList.toggle("active", lang === "el");
-
 
         esToTargetLabel.textContent = "Traducción al " + cfg.nameEs + ":";
         targetLiveLabel.textContent = cfg.liveLabel;
@@ -631,7 +567,6 @@
         inputTarget.placeholder = cfg.placeholder;
         transFromEs.textContent = "—";
         transFromTarget.textContent = "—";
-
 
         chipsTarget.innerHTML = "";
         cfg.chips.forEach((c) => {
@@ -647,24 +582,19 @@
         });
       }
 
-
       function updateUIState() {
         panelEs.classList.toggle("listening-es", activeSide === "es");
         panelTarget.classList.toggle("listening-target", activeSide === "target");
 
-
         micEs.classList.toggle("recording", activeSide === "es");
         micTarget.classList.toggle("recording", activeSide === "target");
-
 
         statusEs.textContent = activeSide === "es" ? "● Escuchando" : "Inactivo";
         statusEs.classList.toggle("live", activeSide === "es");
 
-
         statusTarget.textContent = activeSide === "target" ? "● Escuchando" : "Inactivo";
         statusTarget.classList.toggle("live", activeSide === "target");
       }
-
 
       function stopListening() {
         activeSide = null;
@@ -680,13 +610,10 @@
         updateUIState();
       }
 
-
       function hasOkTrigger(text) {
-        // Detecta ok, okay, οκ, οκέι al final de la frase (con signos opcionales)
         const regex = /(?:^|[\s,.;:!?¿¡])(ok|okay|οκ|οκει|οκέι)[\s,.;:!?¿¡]*$/i;
         return regex.test(text.trim());
       }
-
 
       function stripOkTrigger(text) {
         return text
@@ -695,13 +622,10 @@
           .trim();
       }
 
-
       async function translateText(text, sourceLang, destLang) {
         const clean = text.trim();
         if (!clean) return "";
 
-
-        // 1. Intento principal: Google Translate endpoint público ligero
         try {
           const urlG =
             "https://translate.googleapis.com/translate_a/single?client=gtx&sl=" +
@@ -720,8 +644,6 @@
           }
         } catch (e) {}
 
-
-        // 2. Respaldo: MyMemory API
         try {
           const urlM =
             "https://api.mymemory.translated.net/get?q=" +
@@ -737,10 +659,8 @@
           }
         } catch (e) {}
 
-
         throw new Error("No se pudo conectar con el servicio de traducción.");
       }
-
 
       function speakText(text, langCode, onComplete) {
         if (!("speechSynthesis" in window)) {
@@ -749,14 +669,11 @@
           return;
         }
 
-
         window.speechSynthesis.cancel();
-
 
         const utter = new SpeechSynthesisUtterance(text);
         utter.lang = langCode;
         utter.rate = 1.0;
-
 
         const voices = window.speechSynthesis.getVoices();
         const shortCode = langCode.split("-")[0].toLowerCase();
@@ -764,7 +681,6 @@
         const partialVoice = voices.find((v) => v.lang.toLowerCase().startsWith(shortCode));
         if (exactVoice) utter.voice = exactVoice;
         else if (partialVoice) utter.voice = partialVoice;
-
 
         let finished = false;
         const finishOnce = () => {
@@ -774,25 +690,19 @@
           if (onComplete) onComplete();
         };
 
-
         utter.onstart = () => {
           speakingText.textContent = "🔊 Reproduciendo (" + langCode + "): " + text;
           speakingBanner.classList.add("visible");
         };
 
-
         utter.onend = finishOnce;
         utter.onerror = finishOnce;
-
 
         speakingText.textContent = "🔊 Reproduciendo (" + langCode + "): " + text;
         speakingBanner.classList.add("visible");
 
-
         window.speechSynthesis.speak(utter);
 
-
-        // Watchdog de seguridad en caso de que el evento onend no se dispare en algunos móviles
         const estimatedMs = Math.max(2500, text.length * 95 + 1500);
         setTimeout(() => {
           if (!window.speechSynthesis.speaking && !finished) {
@@ -801,22 +711,18 @@
         }, estimatedMs);
       }
 
-
       async function handleFinalPhrase(side, rawText, fromMic) {
         if (isProcessing) return;
         const cleanPhrase = stripOkTrigger(rawText);
         if (!cleanPhrase) return;
 
-
         isProcessing = true;
         if (fromMic) stopListening();
-
 
         const cfg = LANG_CONFIG[targetLang];
         const sourceLang = side === "es" ? "es" : cfg.code;
         const destLang = side === "es" ? cfg.code : "es";
         const ttsLang = side === "es" ? cfg.ttsLang : "es-ES";
-
 
         if (side === "es") {
           liveEs.textContent = cleanPhrase;
@@ -825,7 +731,6 @@
           liveTarget.textContent = cleanPhrase;
           transFromTarget.textContent = "Traduciendo...";
         }
-
 
         try {
           const translated = await translateText(cleanPhrase, sourceLang, destLang);
@@ -836,7 +741,6 @@
             transFromTarget.textContent = translated;
             lastSpokenTargetToEs = translated;
           }
-
 
           speakText(translated, ttsLang, () => {
             isProcessing = false;
@@ -851,40 +755,32 @@
         }
       }
 
-
       function startListening(side) {
         hideAlert();
         unlockAudio();
 
-
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SpeechRecognition) {
-          showAlert("Este navegador no soporta reconocimiento de voz (usa Google Chrome o Edge).");
+          showAlert("Este navegador no soporta reconocimiento de voz.");
           return;
         }
-
 
         if (activeSide === side) {
           stopListening();
           return;
         }
 
-
         stopListening();
-
 
         const cfg = LANG_CONFIG[targetLang];
         const lang = side === "es" ? "es-AR" : cfg.speechLang;
-
 
         const rec = new SpeechRecognition();
         rec.lang = lang;
         rec.continuous = true;
         rec.interimResults = true;
 
-
         let accumulatedFinal = "";
-
 
         rec.onstart = () => {
           activeSide = side;
@@ -895,7 +791,6 @@
             liveTarget.innerHTML = '<span class="interim">' + cfg.waiting + "</span>";
           }
         };
-
 
         rec.onresult = (event) => {
           let interim = "";
@@ -908,7 +803,6 @@
             }
           }
 
-
           const fullCurrent = (accumulatedFinal + " " + interim).trim();
           const box = side === "es" ? liveEs : liveTarget;
           box.innerHTML =
@@ -918,16 +812,14 @@
             interim +
             "</span>";
 
-
           if (hasOkTrigger(fullCurrent)) {
             handleFinalPhrase(side, fullCurrent, true);
           }
         };
 
-
         rec.onerror = (event) => {
           if (event.error === "not-allowed" || event.error === "service-not-allowed") {
-            showAlert("Permiso de micrófono denegado. Actívalo en el candado de la barra de direcciones.");
+            showAlert("Permiso de micrófono denegado. Actívalo en los ajustes del navegador/app.");
             stopListening();
           } else if (event.error === "network") {
             showAlert("Error de red en el reconocimiento de voz. Verifica tu conexión a internet.");
@@ -935,9 +827,7 @@
           }
         };
 
-
         rec.onend = () => {
-          // Si sigue activo y no estamos procesando una traducción, reinicia escucha continua
           if (activeSide === side && !isProcessing) {
             try {
               rec.start();
@@ -946,7 +836,6 @@
             }
           }
         };
-
 
         recognition = rec;
         try {
@@ -957,15 +846,11 @@
         }
       }
 
-
-      // Eventos
       micEs.addEventListener("click", () => startListening("es"));
       micTarget.addEventListener("click", () => startListening("target"));
 
-
       optEn.addEventListener("click", () => setTargetLanguage("en"));
       optEl.addEventListener("click", () => setTargetLanguage("el"));
-
 
       btnAutoTurn.addEventListener("click", () => {
         autoTurn = !autoTurn;
@@ -973,12 +858,10 @@
         btnAutoTurn.classList.toggle("active-toggle", autoTurn);
       });
 
-
       btnTestAudio.addEventListener("click", () => {
         unlockAudio();
         speakText("Sonido activado correctamente.", "es-ES");
       });
-
 
       btnStopAudio.addEventListener("click", () => {
         if ("speechSynthesis" in window) window.speechSynthesis.cancel();
@@ -986,9 +869,7 @@
         isProcessing = false;
       });
 
-
       btnDismissAlert.addEventListener("click", hideAlert);
-
 
       sendEs.addEventListener("click", () => {
         unlockAudio();
@@ -998,11 +879,9 @@
         handleFinalPhrase("es", val, false);
       });
 
-
       inputEs.addEventListener("keydown", (e) => {
         if (e.key === "Enter") sendEs.click();
       });
-
 
       sendTarget.addEventListener("click", () => {
         unlockAudio();
@@ -1012,11 +891,9 @@
         handleFinalPhrase("target", val, false);
       });
 
-
       inputTarget.addEventListener("keydown", (e) => {
         if (e.key === "Enter") sendTarget.click();
       });
-
 
       replayEs.addEventListener("click", () => {
         unlockAudio();
@@ -1025,14 +902,12 @@
         }
       });
 
-
       replayTarget.addEventListener("click", () => {
         unlockAudio();
         if (lastSpokenTargetToEs) {
           speakText(lastSpokenTargetToEs, "es-ES");
         }
       });
-
 
       document.querySelectorAll('.chip[data-side="es"]').forEach((chip) => {
         chip.addEventListener("click", () => {
@@ -1041,12 +916,17 @@
         });
       });
 
-
-      // Inicializar voces y vista secundaria
       if ("speechSynthesis" in window) {
         window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
       }
       setTargetLanguage("en");
+
+      // Registro del Service Worker para PWA / APK
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("./sw.js").catch(() => {});
+        });
+      }
     })();
   </script>
 </body>
